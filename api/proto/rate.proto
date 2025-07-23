@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "usdt/api/proto";
+
+service RateService {
+	rpc GetRates (Empty) returns (RateResponse);
+	rpc HealthCheck (Empty) returns (HealthResponse);
+}
+
+message RateResponse {
+	double ask = 1;
+	double bid = 2;
+	int64 timestamp = 3;
+}
+
+message HealthResponse {
+	bool status = 1;
+}
+
+message Empty {}

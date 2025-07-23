@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  # OpenTelemetry Collector 
+  otel-collector:
+    image: otel/opentelemetry-collector
+    ports:
+      - "8888:8888"  # OTLP gRPC 
+    volumes:
+      - ./otel-config.yaml:/etc/otel/config.yaml
+    command: ["--config=/etc/otel/config.yaml"]
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"  # Web UI Prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_DSN: "postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable"
+      GRPC_PORT: "50051"
+      METRICS_PORT: "2112"
+      OTLP_ENDPOINT: "otel-collector:4317"
+      SERVICE_NAME: "usdt-rate-service" 
+    ports:
+      - "50051:50051"
+      - "2112:2112"
+    volumes:
+      - ./migrations:/app/migrations  
+    depends_on:
+      postgres:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+volumes:
+  postgres_data:

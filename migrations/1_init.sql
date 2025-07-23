@@ -1,0 +1,10 @@
+-- +goose Up
+CREATE TABLE IF NOT EXISTS rates (
+    id SERIAL PRIMARY KEY,
+    ask DOUBLE PRECISION NOT NULL,
+    bid DOUBLE PRECISION NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL
+);
+
+-- +goose Down
+DROP TABLE IF EXISTS rates;
