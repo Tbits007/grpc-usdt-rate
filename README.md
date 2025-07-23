@@ -38,6 +38,7 @@ docker-compose up --build -d
 **Формат запроса**:
 ```json
 {}
+```
 **Ответ**: 
 ```json
 {
