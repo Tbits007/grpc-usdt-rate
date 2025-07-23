@@ -22,14 +22,14 @@ FROM alpine:latest
 
 WORKDIR /app
 
-RUN apk add --no-cache postgresql-client bash ca-certificates
+RUN apk add --no-cache postgresql-client bash dos2unix ca-certificates
 
 
 COPY --from=builder /app/bin/goose /usr/local/bin/goose
 COPY --from=builder /app/usdt-service .
 
 COPY entrypoint.sh .
-RUN chmod +x entrypoint.sh
+RUN dos2unix entrypoint.sh && chmod +x entrypoint.sh
 
 EXPOSE 50051 2112
 

@@ -14,4 +14,4 @@ echo "Applying migrations..."
 goose -dir /app/migrations postgres "$POSTGRES_DSN" up
 
 echo "Starting application..."
-exec ./usdt-service
+exec ./app
