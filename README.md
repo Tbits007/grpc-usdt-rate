@@ -64,11 +64,14 @@ docker-compose up --build -d
 
 Запуск с флагами:
 ```bash
-./usdt-rate-service \
-  -postgres-dsn="postgres://user:pass@dbhost:5432/dbname" \
-  -grpc-port=50052 \
-  -metrics-port=3000 \
+go build -o ./bin/usdt-service.exe ./cmd/app/main.go
+
+./bin/usdt-service \
+  -postgres-dsn="postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable" \
+  -grpc-port=50051 \
+  -metrics-port=2112 \
   -otlp-endpoint="otel:4317"
+  -service-name="usdt-rate-service"
 ```
 
 ## TODO:
