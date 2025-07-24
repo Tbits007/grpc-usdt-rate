@@ -11,7 +11,7 @@ cd grpc-usdt-rate
 docker-compose up --build -d
 ```
 
-# gRPC API Документация
+# gRPC API
 
 ## Доступные методы
 
