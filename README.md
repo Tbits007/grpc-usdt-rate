@@ -46,6 +46,31 @@ docker-compose up --build -d
 }
 ```
 
+## Конфигурация
+
+Сервис можно настроить с использованием либо флагов командной строки, либо переменных окружения. Флаги имеют приоритет над переменными окружения.
+
+### Параметры конфигурации
+
+| Флаг            | Переменная окружения | Значение по умолчанию                              | Описание                               |
+|-----------------|-----------------------|----------------------------------------------------|----------------------------------------|
+| `-postgres-dsn` | `POSTGRES_DSN`        | `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable` | Строка подключения к PostgreSQL |
+| `-grpc-port`    | `GRPC_PORT`           | `50051`                                            | Порт gRPC сервера                     |
+| `-metrics-port` | `METRICS_PORT`        | `2112`                                             | Порт сервера метрик                   |
+| `-otlp-endpoint`| `OTLP_ENDPOINT`       | `otel-collector:4317`                              | Endpoint OTLP коллектора               |
+| `-service-name` | `SERVICE_NAME`        | `usdt-rate-service`                                | Имя сервиса для трейсинга              |
+
+### Примеры использования
+
+Запуск с флагами:
+```bash
+./usdt-rate-service \
+  -postgres-dsn="postgres://user:pass@dbhost:5432/dbname" \
+  -grpc-port=50052 \
+  -metrics-port=3000 \
+  -otlp-endpoint="otel:4317"
+```
+
 ## TODO:
 
 - [x] Логирование с помощью `zap`
