@@ -36,8 +36,6 @@ docker-compose up --build -d
 
 # gRPC API
 
-## Доступные методы
-
 ### 1. Получение курса USDT
 **Endpoint**: `RateService/GetRates`  
 **Тип**: Unary RPC  
