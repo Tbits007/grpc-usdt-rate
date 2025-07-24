@@ -11,7 +11,7 @@ cd grpc-usdt-rate
 docker-compose up --build -d
 ```
 
-# gRPC API Документация
+# gRPC API
 
 ## Доступные методы
 
@@ -46,7 +46,46 @@ docker-compose up --build -d
 }
 ```
 
-## ✅ Done / 📝 TODO Tasks for the Project
+## Конфигурация
+
+Сервис можно настроить с использованием либо флагов командной строки, либо переменных окружения. Флаги имеют приоритет над переменными окружения.
+
+### Параметры конфигурации
+
+| Флаг            | Переменная окружения | Значение по умолчанию                              | Описание                               |
+|-----------------|-----------------------|----------------------------------------------------|----------------------------------------|
+| `-postgres-dsn` | `POSTGRES_DSN`        | `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable` | Строка подключения к PostgreSQL |
+| `-grpc-port`    | `GRPC_PORT`           | `50051`                                            | Порт gRPC сервера                     |
+| `-metrics-port` | `METRICS_PORT`        | `2112`                                             | Порт сервера метрик                   |
+| `-otlp-endpoint`| `OTLP_ENDPOINT`       | `otel-collector:4317`                              | Endpoint OTLP коллектора               |
+| `-service-name` | `SERVICE_NAME`        | `usdt-rate-service`                                | Имя сервиса для трейсинга              |
+
+### Примеры использования
+
+Запуск с флагами:
+```bash
+go build -o ./bin/usdt-service.exe ./cmd/app/main.go
+
+./bin/usdt-service \
+  -postgres-dsn="postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable" \
+  -grpc-port=50051 \
+  -metrics-port=2112 \
+  -otlp-endpoint="otel:4317"
+  -service-name="usdt-rate-service"
+```
+
+Запуск с переменными окружения:
+```
+$env:POSTGRES_DSN = "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"
+$env:GRPC_PORT = "50051"
+$env:METRICS_PORT = "2112"
+$env:OTLP_ENDPOINT = "otel:4317"
+$env:SERVICE_NAME = "usdt-rate-service"
+
+go run ./cmd/app/main.go
+```
+
+## TODO:
 
 - [x] Логирование с помощью `zap`
 - [x] Использование миграций для создания схемы БД
