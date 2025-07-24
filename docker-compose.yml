@@ -15,26 +15,28 @@ services:
       timeout: 5s
       retries: 5
 
-
   # OpenTelemetry Collector 
   otel-collector:
     image: otel/opentelemetry-collector
     ports:
-      - "8888:8888"  # OTLP gRPC 
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "8888:8888"   # Metrics
+      - "8889:8889"   # Prometheus
     volumes:
       - ./otel-config.yaml:/etc/otel/config.yaml
     command: ["--config=/etc/otel/config.yaml"]
 
-  # Prometheus
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:latest
     ports:
-      - "9090:9090"  # Web UI Prometheus
+      - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
+      - otel-collector
       - app
-
+      
   app:
     build:
       context: .

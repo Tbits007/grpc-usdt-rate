@@ -1,23 +1,30 @@
 package config
 
-import "os"
+import (
+	"flag"
+	"os"
+)
 
 type Config struct {
-	PostgresDSN         string
-	GRPCPort            string
-	MetricsPort         string
-	OTLPEndpoint        string
-	ServiceName         string
+	PostgresDSN   string
+	GRPCPort      string
+	MetricsPort   string
+	OTLPEndpoint  string
+	ServiceName   string
 }
 
 func Load() Config {
-	return Config{
-		PostgresDSN:    getEnv("POSTGRES_DSN", "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"),
-		GRPCPort:       getEnv("GRPC_PORT", "50051"),
-		MetricsPort:    getEnv("METRICS_PORT", "2112"),
-		OTLPEndpoint:  getEnv("OTLP_ENDPOINT", "otel-collector:4317"),
-		ServiceName:   getEnv("SERVICE_NAME", "usdt-rate-service"),
-	}
+	cfg := Config{}
+
+	flag.StringVar(&cfg.PostgresDSN, "postgres-dsn", getEnv("POSTGRES_DSN", "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"), "PostgreSQL connection string")
+	flag.StringVar(&cfg.GRPCPort, "grpc-port", getEnv("GRPC_PORT", "50051"), "gRPC server port")
+	flag.StringVar(&cfg.MetricsPort, "metrics-port", getEnv("METRICS_PORT", "2112"), "Metrics server port")
+	flag.StringVar(&cfg.OTLPEndpoint, "otlp-endpoint", getEnv("OTLP_ENDPOINT", "otel-collector:4317"), "OTLP collector endpoint")
+	flag.StringVar(&cfg.ServiceName, "service-name", getEnv("SERVICE_NAME", "usdt-rate-service"), "Service name for tracing")
+
+	flag.Parse()
+
+	return cfg
 }
 
 func getEnv(key, fallback string) string {
