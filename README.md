@@ -74,6 +74,17 @@ go build -o ./bin/usdt-service.exe ./cmd/app/main.go
   -service-name="usdt-rate-service"
 ```
 
+Запуск с переменными окружения:
+```
+$env:POSTGRES_DSN = "postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"
+$env:GRPC_PORT = "50051"
+$env:METRICS_PORT = "2112"
+$env:OTLP_ENDPOINT = "otel:4317"
+$env:SERVICE_NAME = "usdt-rate-service"
+
+go run ./cmd/app/main.go
+```
+
 ## TODO:
 
 - [x] Логирование с помощью `zap`
