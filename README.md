@@ -11,6 +11,29 @@ cd grpc-usdt-rate
 docker-compose up --build -d
 ```
 
+## Makefile команды
+
+- `make build`  
+  Сборка приложения, создаёт бинарный файл `./bin/usdt-service`.
+
+- `make run`  
+  Запуск приложения локально через `go run`.
+
+- `make test`  
+  Запуск unit-тестов с подробным выводом и покрытием кода.
+
+- `make docker-build`  
+  Сборка Docker-образа с приложением под тегом `grpc-usdt-rate`.
+
+- `make docker-up`  
+  Сборка Docker-образа и запуск контейнеров в фоне через `docker-compose up -d`.
+
+- `make docker-down`  
+  Остановка и удаление запущенных контейнеров `docker-compose`.
+
+- `make lint`  
+  Запуск статического анализа кода с помощью `golangci-lint`.
+
 # gRPC API
 
 ## Доступные методы
